@@ -1,0 +1,156 @@
+// HomeView SCSS
+
+// Variables
+$primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+$secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+$white: white;
+$text-dark: #333;
+$text-light: #666;
+$shadow-light: rgba(0, 0, 0, 0.1);
+$shadow-medium: rgba(0, 0, 0, 0.15);
+$transition-smooth: all 0.3s ease;
+$border-radius: 8px;
+
+.home-view {
+  min-height: calc(100vh - 70px);
+  background: #f8f9fa;
+}
+
+// Hero Section
+.hero {
+  background: $primary-gradient;
+  color: $white;
+  padding: 6rem 2rem;
+  text-align: center;
+
+  @media (max-width: 768px) {
+    padding: 4rem 1rem;
+  }
+}
+
+.hero-content {
+  max-width: 800px;
+  margin: 0 auto;
+
+  h1 {
+    font-size: 3.5rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    letter-spacing: -1px;
+
+    @media (max-width: 768px) {
+      font-size: 2.5rem;
+    }
+  }
+
+  p {
+    font-size: 1.25rem;
+    margin-bottom: 2rem;
+    opacity: 0.95;
+
+    @media (max-width: 768px) {
+      font-size: 1rem;
+    }
+  }
+}
+
+// Button Styles
+.btn {
+  padding: 0.75rem 2rem;
+  border: none;
+  border-radius: $border-radius;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: $transition-smooth;
+  text-decoration: none;
+  display: inline-block;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px $shadow-medium;
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+.btn-primary {
+  background: $secondary-gradient;
+  color: $white;
+
+  &:hover {
+    opacity: 0.9;
+  }
+}
+
+// Featured Section
+.featured {
+  max-width: 1200px;
+  margin: 4rem auto;
+  padding: 0 2rem;
+
+  h2 {
+    font-size: 2.5rem;
+    color: $text-dark;
+    margin-bottom: 3rem;
+    text-align: center;
+
+    @media (max-width: 768px) {
+      font-size: 1.75rem;
+      margin-bottom: 2rem;
+    }
+  }
+}
+
+.featured-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+}
+
+.featured-card {
+  background: $white;
+  border-radius: $border-radius;
+  overflow: hidden;
+  box-shadow: 0 4px 12px $shadow-light;
+  transition: $transition-smooth;
+
+  &:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 8px 24px $shadow-medium;
+  }
+
+  .card-placeholder {
+    background: $primary-gradient;
+    color: $white;
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    font-weight: bold;
+
+    @media (max-width: 768px) {
+      height: 150px;
+    }
+  }
+
+  h3 {
+    color: $text-dark;
+    font-size: 1.25rem;
+    margin: 1.5rem 1.5rem 0.5rem;
+  }
+
+  p {
+    color: $text-light;
+    margin: 0 1.5rem 1.5rem;
+    font-size: 0.95rem;
+  }
+}

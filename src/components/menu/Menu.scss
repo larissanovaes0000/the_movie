@@ -1,0 +1,144 @@
+// Menu Component SCSS
+
+// Variables
+$primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+$white: white;
+$light-bg: #f0f0f0;
+$shadow-light: rgba(0, 0, 0, 0.1);
+$shadow-medium: rgba(0, 0, 0, 0.15);
+$transparent-white-2: rgba(255, 255, 255, 0.2);
+$transparent-white-3: rgba(255, 255, 255, 0.3);
+$transparent-white-15: rgba(255, 255, 255, 0.15);
+
+$max-width: 1200px;
+$mobile-breakpoint: 768px;
+$transition-smooth: all 0.3s ease;
+
+.menu {
+  background: $primary-gradient;
+  padding: 0;
+  box-shadow: 0 2px 8px $shadow-light;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+
+  &-container {
+    max-width: $max-width;
+    margin: 0 auto;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &-brand {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: $white;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  &-toggle {
+    display: none;
+    flex-direction: column;
+    background: none;
+    border: none;
+    cursor: pointer;
+    gap: 0.4rem;
+
+    &:hover .hamburger {
+      background-color: $light-bg;
+    }
+  }
+
+  &-list {
+    display: flex;
+    list-style: none;
+    gap: 0;
+    margin: 0;
+    padding: 0;
+    align-items: center;
+  }
+
+  &-item {
+    margin: 0;
+    padding: 0;
+
+    a {
+      display: block;
+      padding: 0.75rem 1.25rem;
+      color: $white;
+      text-decoration: none;
+      font-weight: 500;
+      transition: $transition-smooth;
+      border-radius: 4px;
+      white-space: nowrap;
+
+      &:hover {
+        background-color: $transparent-white-2;
+        transform: translateY(-2px);
+      }
+
+      &:active {
+        background-color: $transparent-white-3;
+      }
+    }
+  }
+}
+
+.hamburger {
+  width: 25px;
+  height: 3px;
+  background-color: $white;
+  border-radius: 2px;
+  transition: $transition-smooth;
+}
+
+// Mobile Responsive
+@media (max-width: $mobile-breakpoint) {
+  .menu {
+    &-container {
+      padding: 1rem;
+    }
+
+    &-brand {
+      font-size: 1.25rem;
+    }
+
+    &-toggle {
+      display: flex;
+    }
+
+    &-list {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: $primary-gradient;
+      flex-direction: column;
+      gap: 0;
+      max-height: 0;
+      overflow: hidden;
+      transition: $transition-smooth;
+
+      &.open {
+        max-height: 500px;
+        box-shadow: 0 4px 12px $shadow-medium;
+      }
+    }
+
+    &-item a {
+      width: 100%;
+      padding: 1rem 1.5rem;
+      border-radius: 0;
+
+      &:hover {
+        background-color: $transparent-white-15;
+        transform: none;
+      }
+    }
+  }
+}
