@@ -28,7 +28,7 @@ export function HomeView() {
       <div className="movies-container">
         {
           movies && movies.map((movie: any) => (
-            <div className="movie-card">
+            <div className="movie-card" title={movie.title}>
               <div className="movie-card-placeholder"
                 style={{
                   backgroundImage: `url(https://image.tmdb.org/t/p/w500${movie.poster_path})`,
@@ -36,8 +36,12 @@ export function HomeView() {
                   backgroundPosition: "center",
                   backgroundRepeat: "no-repeat"
                 }}>
+
+                <button className="favorite-button unselected">&#9825;</button>
+                {/* <button className="favorite-button selected">❤️</button> */}
+
               </div>
-              <h3 className="movie-title">{movie.title}</h3>
+              <h3 className="movie-title" title={movie.title}>{movie.title}</h3>
               <span className="rate">{Number(movie.vote_average).toFixed(1)}</span>
             </div>
           ))

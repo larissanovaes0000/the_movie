@@ -34,6 +34,7 @@ $border-radius: 8px;
       box-shadow: 0 4px 12px $shadow-light;
       transition: $transition-smooth;
       cursor: pointer;
+      position: relative;
 
       &:hover {
         transform: translateY(-8px);
@@ -71,6 +72,35 @@ $border-radius: 8px;
         width: 20px;
         margin: 12px 12px 12px 12px;
         display: flex;
+      }
+
+      .favorite-button {
+        background: #333;
+        outline: none;
+        border: none;
+        width: 32px;
+        height: 32px;
+        padding: 12px;
+        display: flex;
+        border-radius: 50px;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        right: 8px;
+        top: 8px;
+
+        &:hover {
+          border: none;
+          outline: none;
+        }
+      }
+
+      .selected {
+        font-size: 14px;
+      }
+
+      .unselected {
+        font-size: 21px;
       }
     }
   }
