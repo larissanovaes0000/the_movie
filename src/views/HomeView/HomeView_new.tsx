@@ -1,12 +1,11 @@
 import { useEffect, useState } from 'react'
-import type { MouseEvent } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import './HomeView.scss'
 import axios from 'axios'
 import { markFavorite, credentialsAvailable, getFavorites } from '../../services/tmdb'
 import { MovieCard } from '../../components/MovieCard/MovieCard'
 
-export function HomeView() {
+export function HomeViewClean() {
   const [movies, setMovies] = useState<any[]>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -38,7 +37,6 @@ export function HomeView() {
     const params = new URLSearchParams(location.search)
     const q = params.get('query') || ''
     fetchMovies(q)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.search])
 
   const fetchMovies = async (query = '') => {
@@ -67,10 +65,9 @@ export function HomeView() {
     localStorage.setItem('favorites', JSON.stringify(arr))
   }
 
-  const handleToggleFavorite = async (movieId: number, e?: MouseEvent) => {
+  const handleToggleFavorite = async (movieId: number, e?: React.MouseEvent) => {
     e && e.stopPropagation()
     const isFav = favoritesSet.has(movieId)
-    // optimistic update
     const next = new Set(favoritesSet)
     if (isFav) next.delete(movieId)
     else next.add(movieId)
@@ -79,12 +76,10 @@ export function HomeView() {
       if (credentialsAvailable()) {
         await markFavorite(movieId, !isFav)
       } else {
-        // persist locally
         persistLocalFavorites(next)
       }
     } catch (err) {
       console.error('Failed to update favorite on server', err)
-      // rollback
       const rollback = new Set(favoritesSet)
       setFavoritesSet(rollback)
     }
@@ -97,21 +92,23 @@ export function HomeView() {
         {error && <div className="error">{error}</div>}
         {!loading && movies && movies.length === 0 && <div>Nenhum resultado encontrado.</div>}
 
-        {movies && movies.map((movie: any) => (
-          <MovieCard
-            key={movie.id}
-            movie={{
-              id: movie.id,
-              title: movie.title,
-              poster: movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : undefined,
-              rating: typeof movie.vote_average === 'number' ? Number(movie.vote_average) : undefined,
-              year: movie.release_date ? parseInt(movie.release_date.split('-')[0]) : undefined,
-            }}
-            isFavorite={favoritesSet.has(movie.id)}
-            onClick={() => navigate(`/details/${movie.id}`)}
-            onToggleFavorite={(id) => handleToggleFavorite(id)}
-          />
-        ))}
+        {
+          movies && movies.map((movie: any) => (
+            <MovieCard
+              key={movie.id}
+              movie={{
+                id: movie.id,
+                title: movie.title,
+                poster: movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : undefined,
+                rating: typeof movie.vote_average === 'number' ? Number(movie.vote_average) : undefined,
+                year: movie.release_date ? parseInt(movie.release_date.split('-')[0]) : undefined,
+              }}
+              isFavorite={favoritesSet.has(movie.id)}
+              onClick={() => navigate(`/details/${movie.id}`)}
+              onToggleFavorite={(id) => handleToggleFavorite(id)}
+            />
+          ))
+        }
       </div>
     </section>
   )

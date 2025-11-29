@@ -1,17 +1,4 @@
-// HomeView SCSS
-
-// Variables
-$primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-$secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-$white: white;
-$grey: #334155;
-$grey-dark: #1e293b;
-$yellow: #f59e0b;
-$text-light: #666;
-$shadow-light: rgba(0, 0, 0, 0.1);
-$shadow-medium: rgba(0, 0, 0, 0.15);
-$transition-smooth: all 0.3s ease;
-$border-radius: 8px;
+@use "../../assets/scss/colors" as *;
 
 .movies {
   max-width: 1200px;
@@ -22,7 +9,6 @@ $border-radius: 8px;
   .movies-container {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
     gap: 24px;
 
     .movie-card {

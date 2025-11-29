@@ -1,6 +1,7 @@
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { useNavigate, useLocation } from 'react-router-dom'
 import './Menu.scss'
+import { useDebounce } from '../../hooks/useDebounce'
 
 interface MenuItem {
   id: string
@@ -17,6 +18,8 @@ export function Menu({ items = [], onSearch }: MenuProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [query, setQuery] = useState('')
   const navigate = useNavigate()
+  const debouncedQuery = useDebounce(query, 600)
+  const location = useLocation()
 
   const defaultItems: MenuItem[] = [
     { id: '1', label: 'Home', path: '/' },
@@ -33,7 +36,12 @@ export function Menu({ items = [], onSearch }: MenuProps) {
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault()
     const q = query.trim()
-    if (!q) return
+    if (!q) {
+      // empty submit should clear search results and go home
+      navigate('/')
+      setIsOpen(false)
+      return
+    }
     if (onSearch) {
       onSearch(q)
     } else {
@@ -44,11 +52,31 @@ export function Menu({ items = [], onSearch }: MenuProps) {
     setIsOpen(false)
   }
 
+  useEffect(() => {
+    const q = debouncedQuery.trim()
+    if (!q) {
+      // when user clears the input, remove search state by navigating home
+      // only navigate if currently on search or if there is a query in the URL
+      if (location.pathname === '/search' || location.search.includes('query=')) {
+        navigate('/')
+      }
+      return
+    }
+
+    if (onSearch) {
+      onSearch(q)
+    } else {
+      navigate(`/search?query=${encodeURIComponent(q)}`)
+    }
+    setIsOpen(false)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [debouncedQuery])
+
   return (
     <nav className="menu">
       <div className="menu-container">
         <div className="menu-brand" onClick={() => navigate('/')}>
-          MovieDB
+          🎬 MovieDB
         </div>
 
         <form className="menu-search-wrapper" onSubmit={handleSearch} role="search">
@@ -60,9 +88,7 @@ export function Menu({ items = [], onSearch }: MenuProps) {
             onChange={(e) => setQuery(e.target.value)}
             aria-label="Buscar filme"
           />
-          
-          <button type="submit" className="menu-search-btn" aria-label="Pesquisar">🔍</button> 
-           
+          {/* <button type="submit" className="menu-search-btn" aria-label="Pesquisar">🔍</button>  */}
         </form>
 
         <button className="menu-toggle" onClick={() => setIsOpen(!isOpen)} aria-label="Toggle menu">

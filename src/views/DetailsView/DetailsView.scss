@@ -1,26 +1,32 @@
-// DetailsView SCSS
-
-// Variables
-$primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-$secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-$white: white;
-$text-dark: #333;
-$text-light: #666;
-$text-muted: #999;
-$background: #f8f9fa;
-$shadow-light: rgba(0, 0, 0, 0.1);
-$shadow-medium: rgba(0, 0, 0, 0.15);
-$shadow-dark: rgba(0, 0, 0, 0.3);
-$border-color: #e0e0e0;
-$transition-smooth: all 0.3s ease;
-$border-radius: 8px;
+@use "../../assets/scss/colors" as *;
 
 .details-view {
   min-height: calc(100vh - 70px);
-  background: $background;
+  max-width: 1200px;
+  padding: 2rem;
+  background: $grey-dark;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+
+  &-poster{
+    width: 50%;
+
+    .details-view-poster-image{
+      width: calc(100% - 48px);
+    border-radius: 8px;
+    }
+  }
+
+  &-info{
+    width: 50%;
+
+    .movie-title{
+      margin-top: 0;
+    }
+  }
 }
 
-// Header
 .details-header {
   position: relative;
   background: $primary-gradient;
@@ -59,7 +65,7 @@ $border-radius: 8px;
   }
 }
 
-// Poster
+
 .poster {
   flex-shrink: 0;
 

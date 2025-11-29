@@ -15,40 +15,17 @@ $border-radius: 8px;
 
 .favorites-view {
   min-height: calc(100vh - 70px);
-  background: #f8f9fa;
   padding: 2rem;
 }
 
-// Header
-.favorites-header {
-  max-width: 1200px;
-  margin: 0 auto 3rem;
-  text-align: center;
 
-  h1 {
-    font-size: 2.5rem;
-    color: $text-dark;
-    margin-bottom: 0.5rem;
-
-    @media (max-width: 768px) {
-      font-size: 2rem;
-    }
-  }
-
-  p {
-    font-size: 1.1rem;
-    color: $text-light;
-
-    @media (max-width: 768px) {
-      font-size: 1rem;
-    }
-  }
-}
 
 // Container
 .favorites-container {
   max-width: 1200px;
   margin: 0 auto;
+  display: flex;
+  gap: 24px;
 }
 
 // Grid
