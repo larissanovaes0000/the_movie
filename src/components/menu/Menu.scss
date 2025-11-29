@@ -15,7 +15,8 @@ $mobile-breakpoint: 768px;
 $transition-smooth: all 0.3s ease;
 
 .menu {
-  background: $primary-gradient;
+  background: #1d283a;
+  border-bottom: solid 1px #334155;
   padding: 0;
   box-shadow: 0 2px 8px $shadow-light;
   position: sticky;

@@ -19,7 +19,6 @@ export function Menu({ items = [] }: MenuProps) {
   const defaultItems: MenuItem[] = [
     { id: '1', label: 'Home', path: '/' },
     { id: '2', label: 'Favorites', path: '/favorites' },
-    { id: '3', label: 'Details', path: '/details/1' },
   ]
 
   const menuItems = items.length > 0 ? items : defaultItems
@@ -33,30 +32,23 @@ export function Menu({ items = [] }: MenuProps) {
     <nav className="menu">
       <div className="menu-container">
         <div className="menu-brand" onClick={() => navigate('/')}>
-          The Movie
+          MovieDB
         </div>
-        
-        <button
-          className="menu-toggle"
-          onClick={() => setIsOpen(!isOpen)}
-          aria-label="Toggle menu"
-        >
+
+        <button className="menu-toggle" onClick={() => setIsOpen(!isOpen)} aria-label="Toggle menu">
           <span className="hamburger"></span>
         </button>
 
         <ul className={`menu-list ${isOpen ? 'open' : ''}`}>
-          {menuItems.map((item) => (
-            <li key={item.id} className="menu-item">
-              <a
-                onClick={(e) => {
-                  e.preventDefault()
-                  handleItemClick(item)
-                }}
-              >
-                {item.label}
-              </a>
-            </li>
-          ))}
+          {
+            menuItems.map((item) => (
+              <li key={item.id} className="menu-item">
+                <a onClick={(e) => { e.preventDefault(); handleItemClick(item) }}>
+                  {item.label}
+                </a>
+              </li>
+            ))
+          }
         </ul>
       </div>
     </nav>
