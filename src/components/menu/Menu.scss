@@ -19,10 +19,13 @@
     position: relative;
   }
 
-  &-brand {
+  &-brand p {
+
     font-size: 1.5rem;
     font-weight: bold;
-    width: 230px;
+    width: 150px;
+    cursor: pointer;
+    line-height: 1;
   }
 
   &-search-wrapper {
@@ -142,7 +145,7 @@
       top: 100%;
       left: 0;
       right: 0;
-      background: $primary-gradient;
+      background: $grey;
       flex-direction: column;
       gap: 0;
       max-height: 0;

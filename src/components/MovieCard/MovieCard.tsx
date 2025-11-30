@@ -1,19 +1,5 @@
 import './MovieCard.scss'
-
-interface Movie {
-  id: number
-  title: string
-  year?: number
-  rating?: number
-  poster?: string
-}
-
-interface MovieCardProps {
-  movie: Movie
-  isFavorite?: boolean
-  onToggleFavorite?: (id: number) => void
-  onClick?: () => void
-}
+import type { MovieCardProps } from './interfaces'
 
 export function MovieCard({ movie, isFavorite = false, onToggleFavorite, onClick }: MovieCardProps) {
   const handleFavorite = (e?: React.MouseEvent) => {

@@ -1,26 +1,15 @@
-// FavoritesView SCSS
-
-// Variables
-$primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-$secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-$white: white;
-$text-dark: #333;
-$text-light: #666;
-$text-muted: #999;
-$shadow-light: rgba(0, 0, 0, 0.1);
-$shadow-medium: rgba(0, 0, 0, 0.15);
-$border-color: #e0e0e0;
-$transition-smooth: all 0.3s ease;
-$border-radius: 8px;
+@use "../../assets/scss/colors" as *;
 
 .favorites-view {
   min-height: calc(100vh - 70px);
   padding: 2rem;
 }
 
+.favorites-authentication{
+    padding: 2rem;
 
+}
 
-// Container
 .favorites-container {
   max-width: 1200px;
   margin: 0 auto;
@@ -28,7 +17,6 @@ $border-radius: 8px;
   gap: 24px;
 }
 
-// Grid
 .favorites-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -45,7 +33,6 @@ $border-radius: 8px;
   }
 }
 
-// Card
 .favorite-card {
   background: $white;
   border-radius: $border-radius;
@@ -91,7 +78,7 @@ $border-radius: 8px;
   }
 }
 
-// Category Badge
+
 .category-badge {
   display: inline-block;
   background: rgba(102, 126, 234, 0.1);
@@ -103,7 +90,7 @@ $border-radius: 8px;
   margin-bottom: 1rem;
 }
 
-// Card Actions
+
 .card-actions {
   display: flex;
   gap: 0.5rem;
@@ -147,7 +134,7 @@ $border-radius: 8px;
   }
 }
 
-// Empty State
+
 .empty-state {
   text-align: center;
   padding: 4rem 2rem;
@@ -176,7 +163,7 @@ $border-radius: 8px;
   }
 }
 
-// Button Styles
+
 .btn {
   padding: 0.75rem 2rem;
   border: none;

@@ -1,146 +1,146 @@
 import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 import './FavoritesView.scss'
-import axios from 'axios'
-import { credentialsAvailable, getFavorites, markFavorite } from '../../services/tmdb'
-import { MovieCard } from '../../components/MovieCard/MovieCard'
 
-interface TMDBMovie {
-  id: number
-  title: string
-  poster_path?: string
-  vote_average?: number
-}
 
 export function FavoritesView() {
-  const [favorites, setFavorites] = useState<TMDBMovie[]>([])
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-  const navigate = useNavigate()
+  const API_KEY = "367014a3bfb5f31c249f13d24550b58f"; 
+  const [sessionId, setSessionId] = useState<string | null>(null);
+  const [accountId, setAccountId] = useState<number | null>(null);
+  const [favorites, setFavorites] = useState<any[]>([]);
+  const [loading, setLoading] = useState(false);
 
-  const persistLocalFavoritesIds = (ids: number[]) => {
-    localStorage.setItem('favorites', JSON.stringify(ids))
+
+  async function createRequestToken() {
+    const res = await fetch(
+      `https://api.themoviedb.org/3/authentication/token/new?api_key=${API_KEY}`
+    );
+    const data = await res.json();
+    return data.request_token;
   }
 
-  const handleToggleFavorite = async (movieId: number) => {
-    const prev = favorites
-    const next = prev.filter(m => m.id !== movieId)
-    setFavorites(next)
-    try {
-      if (credentialsAvailable()) {
-        await markFavorite(movieId, false)
-      } else {
-        const stored = localStorage.getItem('favorites')
-        if (!stored) return
-        const parsed = JSON.parse(stored)
-        if (parsed.length > 0 && typeof parsed[0] === 'number') {
-          const newIds = (parsed as number[]).filter(id => id !== movieId)
-          persistLocalFavoritesIds(newIds)
-        } else if (parsed.length > 0 && typeof parsed[0] === 'object') {
-          const newObjs = (parsed as any[]).filter(o => o.id !== movieId)
-          persistLocalFavoritesIds(newObjs.map(o => o.id))
-        }
+
+  async function authenticate() {
+    const token = await createRequestToken();
+    window.location.href = `https://www.themoviedb.org/authenticate/${token}?redirect_to=${window.location.origin}/tmdb-auth`;
+  }
+
+  async function generateSessionId(approvedToken: string) {
+    const res = await fetch(
+      `https://api.themoviedb.org/3/authentication/session/new?api_key=${API_KEY}`,
+      {
+        method: "POST",
+        body: JSON.stringify({ request_token: approvedToken }),
+        headers: { "Content-Type": "application/json" },
       }
-    } catch (err) {
-      console.error('Failed to update favorite', err)
-      setFavorites(prev)
+    );
+
+    const data = await res.json();
+    if (data.success) {
+      setSessionId(data.session_id);
+      localStorage.setItem("tmdb_session", data.session_id);
     }
+  }
+
+  async function loadAccountId(session: string) {
+    const res = await fetch(
+      `https://api.themoviedb.org/3/account?api_key=${API_KEY}&session_id=${session}`
+    );
+    const data = await res.json();
+    setAccountId(data.id);
+    return data.id;
+  }
+
+
+  async function loadFavorites(account: number, session: string) {
+    const res = await fetch(
+      `https://api.themoviedb.org/3/account/${account}/favorite/movies?api_key=${API_KEY}&session_id=${session}`
+    );
+    const data = await res.json();
+    setFavorites(data.results || []);
   }
 
   useEffect(() => {
+    const savedSession = localStorage.getItem("tmdb_session");
+    const urlParams = new URLSearchParams(window.location.search);
+    const approvedToken = urlParams.get("request_token");
+    const approved = urlParams.get("approved");
 
-    const load = async () => {
-      setLoading(true)
-      setError(null)
-      try {
-        if (credentialsAvailable()) {
-              console.log('hehehehe')
-          const data = await getFavorites()
-          setFavorites(data.results || [])
-          console.log(data)
-        } else {
-          // fallback to localStorage
-          const stored = localStorage.getItem('favorites')
-          const list = stored ? JSON.parse(stored) : []
+    async function handleFlow() {
+      setLoading(true);
 
-          // older fallback stored only IDs (number[]). If so, try to fetch details
-          if (list.length > 0 && typeof list[0] === 'number') {
-            const API_KEY = (import.meta as any).env.VITE_TMDB_API_KEY
-            if (API_KEY) {
-              try {
-                const details = await Promise.all(
-                  list.map((id: number) =>
-                    axios.get(`https://api.themoviedb.org/3/movie/${id}`, {
-                      params: { api_key: API_KEY, language: 'pt-BR' }
-                    }).then(r => {r.data
-                      console.log('',r.data)
-                    })
-                  )
-                )
-                setFavorites(details)
-                console.log(details)
-              } catch (err) {
-                console.error('Failed to fetch local favorite details', err)
-                // fallback to minimal objects
-                setFavorites(list.map((id: number) => ({ id, title: `Filme ${id}` })))
-              }
-            } else {
-              // no API key — create minimal placeholders
-              setFavorites(list.map((id: number) => ({ id, title: `Filme ${id}` })))
-            }
-          } else {
-            setFavorites(list)
-          }
-        }
-      } catch (err: any) {
-        console.error(err)
-        setError('Erro ao carregar favoritos')
-      } finally {
-        setLoading(false)
+      if (approved === "true" && approvedToken) {
+        await generateSessionId(approvedToken);
+        return;
       }
+
+      if (savedSession && !sessionId) {
+        setSessionId(savedSession);
+        return;
+      }
+
+      setLoading(false);
     }
 
-    load()
-  }, [])
+    handleFlow();
+  }, []);
+
+  useEffect(() => {
+    if (!sessionId) return;
+
+    async function loadAll() {
+      setLoading(true);
+      if (typeof sessionId === 'string') {
+        const accId = await loadAccountId(sessionId);
+        await loadFavorites(accId, sessionId);
+      }
+      setLoading(false);
+    }
+
+    loadAll();
+  }, [sessionId]);
+
+
+  if (loading) return <p>Carregando...</p>;
+
+  if (!sessionId) {
+    return (
+      <div className="view-container">
+        <h2>Favoritos do TMDB</h2>
+        <button onClick={authenticate}>
+          Fazer login no TMDB
+        </button>
+      </div>
+    );
+  }
 
   return (
-    <div className="favorites-view">
-      <div className="favorites-header">
-        <h1>Meus Filmes Favoritos</h1>
-      </div>
+    <div className="view-container favorites-view">
+      <h2>Favoritos do TMDB</h2>
 
-      <div className="favorites-container">
-        {loading && <div>Carregando...</div>}
-        {error && <div className="error">{error}</div>}
-        {!loading && favorites.length === 0 && (
-          <div className="empty-state">
-            <h2>Sem favoritos</h2>
-            <p>Adicione filmes à sua lista de favoritos!</p>
-          </div>
-        )}
-
-
-        {
-          favorites && favorites.map((movie: any) => (
-            <MovieCard
-              key={movie.id}
-              movie={{
-                id: movie.id,
-                title: movie.title,
-                poster: movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : undefined,
-                rating: typeof movie.vote_average === 'number' ? Number(movie.vote_average) : undefined,
-                year: movie.release_date ? parseInt(movie.release_date.split('-')[0]) : undefined,
-              }}
-              isFavorite={true}
-              onClick={() => navigate(`/details/${movie.id}`)}
-              onToggleFavorite={(id) => handleToggleFavorite(id)}
+      <div style={{ display: "flex", flexWrap: "wrap", gap: "20px" }}>
+        {favorites.map((movie) => (
+          <div
+            key={movie.id}
+            style={{
+              width: "160px",
+              background: "#222",
+              padding: "10px",
+              borderRadius: "10px",
+              color: "white",
+            }}
+          >
+            <img
+              src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+              alt={movie.title}
+              style={{ width: "100%", borderRadius: "6px" }}
             />
-          ))
-        }
-
+            <h4 style={{ marginTop: "8px", fontSize: "15px" }}>
+              {movie.title}
+            </h4>
+            <p>⭐ {movie.vote_average?.toFixed(1)}</p>
+          </div>
+        ))}
       </div>
     </div>
-  )
+  );
 }
-
-

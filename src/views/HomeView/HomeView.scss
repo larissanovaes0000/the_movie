@@ -1,93 +1,11 @@
 @use "../../assets/scss/colors" as *;
 
-.movies {
-  max-width: 1200px;
-  padding: 2rem;
-  background: $grey-dark;
-  margin: 0 auto;
-
-  .movies-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 24px;
-
-    .movie-card {
-      width: 18%;
-      height: 275px;
-      background: $grey;
-      border-radius: $border-radius;
-      overflow: hidden;
-      box-shadow: 0 4px 12px $shadow-light;
-      transition: $transition-smooth;
-      cursor: pointer;
-      position: relative;
-
-      &:hover {
-        transform: translateY(-8px);
-        box-shadow: 0 8px 24px $shadow-medium;
-      }
-
-      @media (max-width: 1024px) {
-        width: 20%;
-      }
-
-      @media (max-width: 768px) {
-        width: 100%;
-      }
-
-      .movie-card-placeholder {
-        height: 200px;
-      }
-
-      .movie-title {
-        color: $white;
-        font-size: 14px;
-        margin: 8px 12px;
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-      }
-
-      .rate {
-        background-color: $yellow;
-        color: $grey;
-        border-radius: 50px;
-        padding: 2px 6px;
-        font-size: 12px;
-        font-weight: bold;
-        width: 20px;
-        margin: 12px 12px 12px 12px;
-        display: flex;
-      }
-
-      .favorite-button {
-        background: #333;
-        outline: none;
-        border: none;
-        width: 32px;
-        height: 32px;
-        padding: 12px;
-        display: flex;
-        border-radius: 50px;
-        align-items: center;
-        justify-content: center;
-        position: absolute;
-        right: 8px;
-        top: 8px;
-
-        &:hover {
-          border: none;
-          outline: none;
-        }
-      }
-
-      .selected {
-        font-size: 14px;
-      }
-
-      .unselected {
-        font-size: 21px;
-      }
-    }
+.movies-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  
+  .loading-section{
+    width: calc(100% - 60px);
   }
 }
