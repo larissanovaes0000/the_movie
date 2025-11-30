@@ -1,8 +1,8 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
-import { Menu } from '../components/Menu/Menu'
 import { FavoritesView } from '../views/FavoritesView/FavoritesView'
 import { DetailsView } from '../views/DetailsView/DetailsView'
 import { HomeView } from '../views/HomeView/HomeView'
+import { Menu } from '../components/Menu/Menu'
 
 export function AppRoutes() {
   return (

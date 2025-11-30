@@ -5,7 +5,7 @@ import './FavoritesView.scss'
 export function FavoritesView() {
   const API_KEY = "367014a3bfb5f31c249f13d24550b58f"; 
   const [sessionId, setSessionId] = useState<string | null>(null);
-  const [accountId, setAccountId] = useState<number | null>(null);
+ // const [accountId, setAccountId] = useState<number | null>(null);
   const [favorites, setFavorites] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
 
@@ -46,7 +46,7 @@ export function FavoritesView() {
       `https://api.themoviedb.org/3/account?api_key=${API_KEY}&session_id=${session}`
     );
     const data = await res.json();
-    setAccountId(data.id);
+   // setAccountId(data.id);
     return data.id;
   }
 
