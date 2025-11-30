@@ -96,3 +96,5 @@ export function Menu({ items = [], onSearch }: MenuProps) {
     </nav>
   )
 }
+
+export default Menu
